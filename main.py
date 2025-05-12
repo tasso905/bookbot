@@ -1,3 +1,7 @@
+import sys
+from stats import word_count
+
+
 def main():
     count = 0
     returned_dict={}
@@ -6,10 +10,6 @@ def main():
         count += word_count(file_contents)
         returned_dict = letter_count(file_contents)
     print_report(count, returned_dict)
-
-def word_count(words):
-    count_words = len(words.split())
-    return(count_words)
 
 def letter_count(letters):
     count_dict={}
@@ -21,10 +21,33 @@ def letter_count(letters):
             count_dict[letter] += 1
     return(count_dict)
 
-def print_report(count, returned_dict):
-    print("\n --- Begin report of books/frankenstein.txt --- \n")
+def print_report(count, returned_dict, bookpath):
+    print(f"\n --- Begin report of {bookpath} --- \n")
     print(f"{count} words found in the document. \n")
-    for key,value in returned_dict.items():
-        print(f"The {key} character was found {value} times")
+    #for key,value in returned_dict.items():
+    #    print(f"The {key} character was found {value} times")
+    if 'e' in returned_dict:
+        print(f"e: {returned_dict['e']}")
+    if 't' in returned_dict:
+        print(f"t: {returned_dict['t']}")
 
-main()
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+    
+    file_path = sys.argv[1]
+    
+    count = 0
+    returned_dict = {}
+
+    with open(file_path, 'r') as f:
+        file_contents = f.read()
+
+    count += word_count(file_contents)
+    returned_dict = letter_count(file_contents)
+
+    print_report(count, returned_dict, file_path)
+
+if __name__ == "__main__":
+    main()
